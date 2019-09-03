@@ -1,7 +1,7 @@
 {
   "name": "silvercommerce/upgrader",
   "description": "Silverstripe module for creating and managing generic 'Order' objects",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
     "homepage": "http://github.com/silvercommerce/upgrader",
     "keywords": ["silverstripe", "commerce", "ecommerce", "orders", "checkout", "payment"],
     "license": "BSD-3-Clause",
@@ -15,12 +15,7 @@
         "issues": "http://github.com/silvercommerce/upgrader/issues"
     },
     "require": {
-        "i-lateral/silverstripe-commerce": "^3.0",
-        "i-lateral/silverstripe-orders": "^4.0",
-        "i-lateral/silverstripe-commerce-customisableproduct": "^3.0",
-        "i-lateral/silverstripe-commerce-bulkprice": "^3.0",
-        "i-lateral/silverstripe-commerce-groupedproduct": "*",
-        "i-lateral/silverstripe-themes-kube-commerce": "*"
+        "silvercommerce/silvercommerce-recipe": "^0.2"
     },
     "extra": {
         "installer-name": "upgrader"
