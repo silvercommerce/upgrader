@@ -1,0 +1,16 @@
+mappings:
+    Order: SilverCommerce\OrdersAdmin\Model\Invoice
+    Estimate: SilverCommerce\OrdersAdmin\Model\Estimate
+    Discount: SilverCommerce\Discounts\Model\Discount
+    OrderItem: SilverCommerce\OrdersAdmin\Model\LineItem
+    OrderItemCustomisation: SilverCommerce\OrdersAdmin\Model\LineItemCustomisation
+    OrderNotification: SilverCommerce\OrdersAdmin\Model\Notification
+    PostageArea: SilverCommerce\Postage\Model\PostageType
+    CatalogueCategory: SilverCommerce\CatalogueAdmin\Model\CatalogueCategory
+    CatalogueProduct: SilverCommerce\CatalogueAdmin\Model\CatalogueProduct
+    TaxRate: SilverCommerce\TaxAdmin\Model\TaxRate
+    CustomisableProduct: SilverCommerce\CustomisableProducts\CustomisableProduct
+    ProductCustomisation: SilverCommerce\CustomisableProducts\ProductCustomisation
+    ProductCustomisationList: SilverCommerce\CustomisableProducts\ProductCustomisationList
+    ProductCustomisationOption: SilverCommerce\CustomisableProducts\ProductCustomisationOption
+    BulkPrice: SilverCommerce\BulkPricing\Model\BulkPricingBracket
