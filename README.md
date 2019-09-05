@@ -24,3 +24,6 @@ Once installed you needd to remove any/all of the followinng modules from your c
 ```
 then run `composer update` to update your composer.lock and to ensure you have the latest versions of all the modules.
 
+### Now the hard bit
+
+now you need to work through all of the errors you're going to get: *This module is not yet finished*
