@@ -14,9 +14,13 @@ mappings:
     ProductCustomisationList: SilverCommerce\CustomisableProducts\ProductCustomisationList
     ProductCustomisationOption: SilverCommerce\CustomisableProducts\ProductCustomisationOption
     BulkPrice: SilverCommerce\BulkPricing\Model\BulkPricingBracket
-    Commerce: null
+    Commerce: false
     Checkout: SilverCommerce\Checkout\Control\Checkout
-    Catalogue: null
+    Catalogue: SilverCommerce\CatalogueFrontend\Control\CatalogueController
     ShoppingCart: SilverCommerce\ShoppingCart\Model\ShoppingCart
-    OrderMigrationTask:
-    OrderItemCustomisationMigrationTask:
+    OrderMigrationTask: SilverCommerce\OrdersAdmin\Tasks\OrderMigrationTask
+    OrderItemCustomisationMigrationTask: false ## probably in customisable products
+    CatalogueAdmin: SilverCommerce\CatalogueAdmin\Admin\CatalogueAdmin
+    Checkout_Controller: SilverCommerce\Checkout\Control\Checkout
+    Payment_Controller: SilverCommerce\Checkout\Control\Checkout
+    OrderAdmin: SilverCommerce\OrdersAdmin\Admin
