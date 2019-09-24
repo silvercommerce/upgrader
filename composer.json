@@ -15,7 +15,7 @@
         "issues": "http://github.com/silvercommerce/upgrader/issues"
     },
     "require": {
-        "silvercommerce/silvercommerce-recipe": "^0.2"
+        "silvercommerce/silvercommerce-recipe": "^1.1"
     },
     "extra": {
         "installer-name": "upgrader"
