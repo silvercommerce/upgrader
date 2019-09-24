@@ -1,11 +1,15 @@
 <?php
 
+use SilverCommerce\CatalogueAdmin\Model\CatalogueProduct;
 use SilverStripe\Dev\BuildTask;
+use SilverStripe\ORM\Queries\SQLDelete;
+use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\SiteConfig\SiteConfig;
+use SilverCommerce\TaxAdmin\Model\TaxRate;
 use SilverCommerce\OrdersAdmin\Model\Invoice;
 use SilverCommerce\OrdersAdmin\Model\Estimate;
 use SilverCommerce\OrdersAdmin\Model\LineItem;
-use SilverStripe\ORM\Queries\SQLDelete;
-use SilverStripe\ORM\Queries\SQLSelect;
+use SilverCommerce\OrdersAdmin\Model\LineItemCustomisation;
 
 /**
  * Task to update old commerce orders into new invoices
@@ -21,7 +25,9 @@ class CommerceUpgradeTask extends BuildTask
     function run($request) {
 
         $this->convertOrders();
+        $this->convertTax();
         $this->convertItems();
+        $this->convertCustomisations();
     }  
     
     /**
@@ -78,6 +84,27 @@ class CommerceUpgradeTask extends BuildTask
     }
 
     /**
+     * convert TaxRates tonew versions
+     *
+     * @return void
+     */
+    private function convertTax()
+    {
+        $rates = TaxRate::get();
+        $config = SiteConfig::current_site_config();
+
+        foreach ($rates as $rate) {
+            $fetch = SQLSelect::create()
+                ->setFrom('"TaxRate"')
+                ->setWhere(array('"TaxRate"."ID"' => $rate->ID));
+            $db = $fetch->execute()->first();
+            $rate->SiteID = $config->ID;
+            $rate->Rate = $db['Amount'];
+            $rate->write();
+        }
+    }
+
+    /**
      * convert OrderItems to LineItems & their Customisations
      *
      * @return void
@@ -90,10 +117,24 @@ class CommerceUpgradeTask extends BuildTask
         $result = $query->execute();
 
         foreach ($result as $row) {
-            $id = $row['ID'];
             ### Update object data
             foreach ($row as $key => $value)
             {
+                switch ($key) {
+                    case "TaxRate":
+                        // Find or make TaxRate object then set TaxRateID
+                        $rate = TaxRate::get()->find('Rate', $value);
+                        if ($rate) {
+                            $row['TaxRateID'] = $rate->ID;
+                        } else if (isset($row['StockID'])) {
+                            $product = CatalogueProduct::get()->find('StockID', $row['StockID']);
+                            if ($product && $product->TaxRateID) {
+                                $row['TaxRateID'] = $product->ID;
+                            }
+                        }
+                        break;
+
+                }
             }
 
             ### Apply changes to database
@@ -104,6 +145,38 @@ class CommerceUpgradeTask extends BuildTask
                 $existing->write();
             } else {            
                 $item = LineItem::create()->update($row);
+                $item->write();
+            }
+        }
+    }
+
+        /**
+     * convert OrderItems to LineItems & their Customisations
+     *
+     * @return void
+     */
+    private function convertCustomisations()
+    {
+        $query = new SQLSelect();
+        $query->setFrom('"OrderItemCustomisation"');
+
+        $result = $query->execute();
+
+        foreach ($result as $row) {
+            $id = $row['ID'];
+            ### Update object data
+            foreach ($row as $key => $value)
+            {
+            }
+
+            ### Apply changes to database
+            $existing = LineItemCustomisation::get()->byID($row['ID']);
+            $row['ClassName'] = LineItemCustomisation::class;
+            if ($existing) {
+                $existing->update($row);
+                $existing->write();
+            } else {            
+                $item = LineItemCustomisation::create()->update($row);
                 $item->write();
             }
         }
