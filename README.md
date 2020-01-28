@@ -11,6 +11,10 @@ This module can be installed via composer:
 ```
 composer require silvercommerce/upgrader
 ```
+Installing this way may not work as composer sometimes refuses to pull down the correct version. For this reason I recommend adding the following linme to your composer.json manually.
+```
+"silvercommerce/upgrader": "dev-ss3"
+```
 
 ### 2 - Usage
 Once installed you needd to remove any/all of the followinng modules from your `composer.json`.
