@@ -13,7 +13,7 @@ composer require silvercommerce/upgrader
 ```
 Installing this way may not work as composer sometimes refuses to pull down the correct version. For this reason I recommend adding the following linme to your composer.json manually.
 ```
-"silvercommerce/upgrader": "dev-ss3"
+"silvercommerce/upgrader": "ss3-dev"
 ```
 
 ### 2 - Usage
