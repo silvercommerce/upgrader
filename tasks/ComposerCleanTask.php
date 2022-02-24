@@ -20,19 +20,40 @@ class ComposerCleanTask extends BuildTask
 
     function run($request) 
     {
-        $composer = file_get_contents(Controller::join_links(BASE_PATH,'composer.json'));
+        $commerce_modules = $this->config()->commerce_modules;
+
+        if (!is_array($commerce_modules)) {
+            throw new LogicException("Invalid commerce modules");
+        }
+
+        $composer_file = Controller::join_links(
+            BASE_PATH,
+            'composer.json'
+        );
+
+        $composer = file_get_contents($composer_file);
         $decode = json_decode($composer);
 
+        if (!property_exists($decode, "require")) {
+            $this->log('No requirements to check');
+            return;
+        }
+
         $require = $decode->require;
-        foreach ($require as $module => $version) {
-            if (in_array($module, $this->config()->commerce_modules)) {
-                $this->log('removing '.$module);
+
+        foreach (array_keys($require) as $module) {
+            if (in_array($module, $commerce_modules)) {
+                $this->log('removing ' . $module);
                 unset($require->$module);      
             }
         }
 
-        $encode = json_encode($decode, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        file_put_contents(Controller::join_links(BASE_PATH,'composer.json'), $encode);
+        $encode = json_encode(
+            $decode,
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+        );
+
+        file_put_contents($composer_file, $encode);
         $this->log('Cleaned Commerce modules from composer.json');
         $this->log('You can now run `composer update`');
     }
