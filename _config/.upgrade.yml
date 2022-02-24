@@ -3,11 +3,10 @@ recipeEquivalences:
   i-lateral/silverstripe-commerce:
     - silvercommerce/silvercommerce-recipe
   i-lateral/silverstripe-orders:
-    - silvercommerce/silvercommerce-recipe
+    - silvercommerce/orders-admin
   i-lateral/silverstripe-commerce-customisableproduct:
-    - silvercommerce/silvercommerce-recipe
+    - silvercommerce/customisable-products
   i-lateral/silverstripe-commerce-bulkprice:
-    - silvercommerce/silvercommerce-recipe
+    - silvercommerce/bulk-pricing
   silverstripe/silverstripe-omnipay:
-    - silvercommerce/silvercommerce-recipe
-
+    - silvercommerce/checkout
