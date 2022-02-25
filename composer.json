@@ -15,7 +15,10 @@
         "issues": "http://github.com/silvercommerce/upgrader/issues"
     },
     "require": {
-        "i-lateral/silverstripe-commerce": "^3.0"
+        "i-lateral/silverstripe-commerce": "^3.0",
+        "i-lateral/silverstripe-commerce-customisableproduct": "^3.0",
+        "i-lateral/silverstripe-commerce-bulkprice": "^3.0",
+        "i-lateral/silverstripe-themes-kube-commerce": "*"
     },
     "extra": {
         "installer-name": "upgrader"
