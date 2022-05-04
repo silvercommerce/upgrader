@@ -1,0 +1,39 @@
+---
+Name: silvercommerceupgraderconfig
+---
+
+# Don't run orders migration task during dev/build, we want
+# to run custom one instead
+SilverCommerce\OrdersAdmin\Tasks\OrdersMigrationTask:
+  run_during_dev_build: false
+
+# Extensions
+SilverCommerce\OrdersAdmin\Model\Estimate:
+  commerce_migration_class: SilverCommerce\Upgrader\Tasks\MigrateOrdersTask
+  extensions:
+    - SilverCommerce\Upgrader\Extensions\CommerceObjectExtension
+
+SilverCommerce\OrdersAdmin\Model\LineItem:
+  commerce_migration_class: SilverCommerce\Upgrader\Tasks\MigrateLineItemsTask
+  extensions:
+    - SilverCommerce\Upgrader\Extensions\CommerceObjectExtension
+
+SilverCommerce\OrdersAdmin\Model\LineItemCustomisation:
+  commerce_migration_class: SilverCommerce\Upgrader\Tasks\MigrateLineItemCustomisationsTask
+  extensions:
+    - SilverCommerce\Upgrader\Extensions\CommerceObjectExtension
+
+SilverCommerce\TaxAdmin\Model\TaxRate:
+  commerce_migration_class: SilverCommerce\Upgrader\Tasks\MigrateTaxRatesTask
+  extensions:
+    - SilverCommerce\Upgrader\Extensions\CommerceObjectExtension
+
+SilverCommerce\Discounts\Model\Discount:
+  commerce_migration_class: SilverCommerce\Upgrader\Tasks\MigrateDiscountsTask
+  extensions:
+    - SilverCommerce\Upgrader\Extensions\CommerceObjectExtension
+
+SilverCommerce\Postage\Model\PostageType:
+  commerce_migration_class: SilverCommerce\Upgrader\Tasks\MigratePostageTask
+  extensions:
+    - SilverCommerce\Upgrader\Extensions\CommerceObjectExtension
