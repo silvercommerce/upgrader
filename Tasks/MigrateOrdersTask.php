@@ -4,6 +4,7 @@ namespace SilverCommerce\Upgrader\Tasks;
 
 use SilverStripe\ORM\DB;
 use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\ORM\Queries\SQLUpdate;
 use SilverCommerce\OrdersAdmin\Model\Invoice;
 use SilverCommerce\OrdersAdmin\Model\Estimate;
 use SilverCommerce\ShoppingCart\Model\ShoppingCart;
@@ -79,14 +80,22 @@ class MigrateOrdersTask extends CommerceUpgradeTask
         ) {
             $data['ClassName'] = ShoppingCart::class;
             $class = ShoppingCart::class;
-        } else {
-            $existing = Estimate::get()->byID($id);
-            $row['ClassName'] = Invoice::class;
+        } elseif ($data['ClassName'] == self::ORDER_TABLE)  {
+            $data['ClassName'] = Invoice::class;
             $class = Invoice::class;
         }
 
         if ($existing) {
-            $existing
+            // Manually insert classname (as it
+            // tends to be set to default)
+            SQLUpdate::create('"' . $existing->baseTable() . '"')
+                ->addWhere(['ID' => $id])
+                ->assign('"ClassName"', $class)
+                ->execute();
+            
+            // Re-update other data via ORM
+            Estimate::get()
+                ->byID($id)
                 ->update($data)
                 ->write();
         } else {
