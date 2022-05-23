@@ -2,14 +2,14 @@
 
 namespace SilverCommerce\Upgrader\Tasks;
 
-use SilverStripe\Dev\BuildTask;
-use SilverStripe\ORM\Queries\SQLSelect;
+use SilverStripe\ORM\DB;
+use SilverStripe\ORM\Queries\SQLUpdate;
 use SilverCommerce\OrdersAdmin\Model\LineItemCustomisation;
 
 /**
  * Task to update old commerce orders into new invoices
  */
-class MigrateLineItemCustomisationsTask extends BuildTask
+class MigrateLineItemCustomisationsTask extends CommerceUpgradeTask
 {
     private static $run_during_dev_build = true;
 
@@ -19,29 +19,56 @@ class MigrateLineItemCustomisationsTask extends BuildTask
  
     protected $description = 'Migrate SS3 commerce Line Item Customisations to new SilverCommerce Structure';
 
-    function run($request)
+    protected function processRow(array $row)
     {
-        $query = new SQLSelect();
-        $query->setFrom('"OrderItemCustomisation"');
-        $result = $query->execute();
+        $id = 0;
+        $class = null;
 
-        foreach ($result as $row) {
-            $id = $row['ID'];
-            ### Update object data
-            foreach ($row as $key => $value)
-            {
-            }
-
-            ### Apply changes to database
-            $existing = LineItemCustomisation::get()->byID($row['ID']);
+        // Attempt to match classnames
+        if (isset($row['ClassName'])
+            && $row['ClassName'] == self::ITEM_CUSTOMISATIONS_TABLE
+        ) {
             $row['ClassName'] = LineItemCustomisation::class;
-            if ($existing) {
-                $existing->update($row);
-                $existing->write();
-            } else {            
-                $item = LineItemCustomisation::create()->update($row);
-                $item->write();
-            }
+            $class = LineItemCustomisation::class;
         }
+
+        if (isset($row['ID'])) {
+            $id = $row['ID'];
+        }
+
+        if (empty($class) || $id < 1) {
+            return false;
+        }
+
+        $existing = LineItemCustomisation::get()
+            ->byID($id);
+
+        if ($existing) {
+            // Manually insert classname (as it tends to be set to default)
+            SQLUpdate::create('"' . $existing->baseTable() . '"')
+                ->addWhere(['ID' => $id])
+                ->assign('"ClassName"', $class)
+                ->execute();
+
+            $existing->update($row);
+            $existing->write();
+        }
+        
+        
+        LineItemCustomisation::create()
+            ->update($row)
+            ->write();
+
+        return true;
+    }
+
+    public function run($request)
+    {
+        parent::processTable(self::ITEM_CUSTOMISATIONS_TABLE, "ItemCustomisations");
+
+        // Rename original table to obsolete
+        DB::dont_require_table(self::ITEM_CUSTOMISATIONS_TABLE);
+
+        return;
     }
 }

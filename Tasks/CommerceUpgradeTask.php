@@ -21,6 +21,8 @@ abstract class CommerceUpgradeTask extends BuildTask
 
     const ITEMS_TABLE = "OrderItem";
 
+    const ITEM_CUSTOMISATIONS_TABLE = "OrderItemCustomisation";
+
     const TAX_RATE_TABLE = "TaxRate";
 
     const DISCOUNTS_TABLE = "Discount";
