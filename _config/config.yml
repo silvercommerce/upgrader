@@ -23,6 +23,12 @@ SilverCommerce\OrdersAdmin\Model\LineItemCustomisation:
   extensions:
     - SilverCommerce\Upgrader\Extensions\CommerceObjectExtension
 
+
+SilverCommerce\OrdersAdmin\Model\Notification:
+  commerce_migration_class: SilverCommerce\Upgrader\Tasks\MigrateOrderNotificationsTask
+  extensions:
+    - SilverCommerce\Upgrader\Extensions\CommerceObjectExtension
+
 SilverCommerce\TaxAdmin\Model\TaxRate:
   commerce_migration_class: SilverCommerce\Upgrader\Tasks\MigrateTaxRatesTask
   extensions:

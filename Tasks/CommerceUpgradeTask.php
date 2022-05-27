@@ -29,6 +29,8 @@ abstract class CommerceUpgradeTask extends BuildTask
 
     const POSTAGE_TABLE = "PostageArea";
 
+    const NOTIFICATION_TABLE = "OrderNotification";
+
     const CHUNK_SIZE = 200;
 
     protected function getTableList(): array
